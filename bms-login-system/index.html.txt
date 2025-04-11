@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Employee Login System</title>
+</head>
+<body>
+  <h2>Employee Login/Logout</h2>
+  <form name="submit-to-google-sheet">
+    <label>Name:</label><br>
+    <input name="name" required /><br><br>
+
+    <label>Action:</label><br>
+    <select name="action">
+      <option value="LOGIN">Login</option>
+      <option value="LOGOUT">Logout</option>
+    </select><br><br>
+
+    <label>Tasks (if logging out):</label><br>
+    <textarea name="tasks"></textarea><br><br>
+
+    <button type="submit">Submit</button>
+    <p id="status"></p>
+  </form>
+
+  <script>
+    const scriptURL = 'PASTE_YOUR_GOOGLE_APPS_SCRIPT_URL_HERE';
+    const form = document.forms['submit-to-google-sheet'];
+    const status = document.getElementById('status');
+
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      fetch(scriptURL, { method: 'POST', body: new FormData(form)})
+        .then(response => status.innerHTML = "Submitted successfully!")
+        .catch(error => status.innerHTML = "Error!");
+      form.reset();
+    });
+  </script>
+</body>
+</html>
