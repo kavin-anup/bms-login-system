@@ -1,105 +1,95 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>BoostMySites Login System</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BoostMySites Login</title>
+  <link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet" />
   <style>
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #f4f6f8;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-    }
-
-    .container {
-      background-color: #fff;
-      padding: 30px 40px;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      width: 100%;
-      max-width: 400px;
-    }
-
-    h2 {
-      text-align: center;
-      margin-bottom: 20px;
-      color: #333;
-    }
-
-    label {
-      font-weight: 500;
-      display: block;
-      margin-top: 15px;
-      margin-bottom: 5px;
-    }
-
-    input, select, textarea, button {
-      width: 100%;
-      padding: 10px;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-      font-size: 15px;
-    }
-
-    button {
-      background-color: #4CAF50;
+      background-color: black;
       color: white;
-      margin-top: 20px;
-      cursor: pointer;
-      border: none;
-    }
-
-    button:hover {
-      background-color: #45a049;
-    }
-
-    #status {
+      font-family: 'Spectral', serif;
       text-align: center;
-      margin-top: 15px;
-      color: #28a745;
+      padding: 2rem;
+    }
+    img {
+      width: 200px;
+      margin-bottom: 20px;
+    }
+    select, input, textarea, button {
+      background-color: orange;
+      color: black;
+      padding: 10px;
+      border: none;
+      margin: 10px;
+      font-size: 1rem;
+      border-radius: 5px;
+    }
+    #task-box {
+      display: none;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h2>Boostmysites Login System</h2>
-    <form name="submit-to-google-sheet">
-      <label>Name:</label>
-      <input name="name" required />
 
-      <label>Action:</label>
-      <select name="action">
-        <option value="LOGIN">Login</option>
-        <option value="LOGOUT">Logout</option>
-      </select>
+  <!-- Logo -->
+  <img src="boostmysites-logo.png" alt="Boostmysites Logo" />
 
-      <label>Tasks (if logging out):</label>
-      <textarea name="tasks" rows="4"></textarea>
+  <!-- Form -->
+  <form id="login-form">
+    <h2>Employee Login System</h2>
 
-      <button type="submit">Submit</button>
-      <p id="status"></p>
-    </form>
-  </div>
+    <!-- Employee Name -->
+    <label for="employee">Select Your Name:</label>
+    <br>
+    <select name="employee" id="employee-select" required>
+      <option value="" disabled selected>Select Name</option>
+      <option value="John">John</option>
+      <option value="Jane">Jane</option>
+      <option value="Alex">Alex</option>
+    </select>
+    <br>
+
+    <!-- Login / Logout -->
+    <label>
+      <input type="radio" name="status" value="login" required onclick="toggleTaskBox(false)" />
+      Log In
+    </label>
+    <label>
+      <input type="radio" name="status" value="logout" onclick="toggleTaskBox(true)" />
+      Log Out
+    </label>
+    <br>
+
+    <!-- Time -->
+    <input type="time" name="time" required />
+    <br>
+
+    <!-- Task Box (Hidden on Login) -->
+    <div id="task-box">
+      <label for="tasks">What did you work on today?</label><br>
+      <textarea name="tasks" rows="4" cols="50" placeholder="Enter tasks..."></textarea>
+    </div>
+
+    <br>
+    <button type="submit">Submit</button>
+  </form>
 
   <script>
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbzVGwwFbqrd0Ob_nUt0jA_sQ-DgITpAr1d0lUVnQq-wCyW1e2WAKA9y34BS9pyZF616/exec';
-    const form = document.forms['submit-to-google-sheet'];
-    const status = document.getElementById('status');
+    function toggleTaskBox(show) {
+      document.getElementById('task-box').style.display = show ? 'block' : 'none';
+    }
 
-    form.addEventListener('submit', e => {
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbzVGwwFbqrd0Ob_nUt0jA_sQ-DgITpAr1d0lUVnQq-wCyW1e2WAKA9y34BS9pyZF616/exec'; // Replace with your actual URL
+
+    document.getElementById('login-form').addEventListener('submit', e => {
       e.preventDefault();
-      fetch(scriptURL, { method: 'POST', body: new FormData(form)})
-        .then(response => {
-          status.innerHTML = "✅ Submitted successfully!";
-          form.reset();
-        })
-        .catch(error => {
-          status.innerHTML = "❌ Submission failed. Try again.";
-        });
+      fetch(scriptURL, { method: 'POST', body: new FormData(e.target) })
+        .then(response => alert("Submitted successfully!"))
+        .catch(error => alert("Something went wrong."));
     });
   </script>
+
 </body>
 </html>
