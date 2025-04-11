@@ -1,26 +1,88 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Employee Login System</title>
+  <title>BoostMySites Login System</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f4f6f8;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .container {
+      background-color: #fff;
+      padding: 30px 40px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 400px;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    label {
+      font-weight: 500;
+      display: block;
+      margin-top: 15px;
+      margin-bottom: 5px;
+    }
+
+    input, select, textarea, button {
+      width: 100%;
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 15px;
+    }
+
+    button {
+      background-color: #4CAF50;
+      color: white;
+      margin-top: 20px;
+      cursor: pointer;
+      border: none;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    #status {
+      text-align: center;
+      margin-top: 15px;
+      color: #28a745;
+    }
+  </style>
 </head>
 <body>
-  <h2>Employee Login/Logout</h2>
-  <form name="submit-to-google-sheet">
-    <label>Name:</label><br>
-    <input name="name" required /><br><br>
+  <div class="container">
+    <h2>Employee Login / Logout</h2>
+    <form name="submit-to-google-sheet">
+      <label>Name:</label>
+      <input name="name" required />
 
-    <label>Action:</label><br>
-    <select name="action">
-      <option value="LOGIN">Login</option>
-      <option value="LOGOUT">Logout</option>
-    </select><br><br>
+      <label>Action:</label>
+      <select name="action">
+        <option value="LOGIN">Login</option>
+        <option value="LOGOUT">Logout</option>
+      </select>
 
-    <label>Tasks (if logging out):</label><br>
-    <textarea name="tasks"></textarea><br><br>
+      <label>Tasks (if logging out):</label>
+      <textarea name="tasks" rows="4"></textarea>
 
-    <button type="submit">Submit</button>
-    <p id="status"></p>
-  </form>
+      <button type="submit">Submit</button>
+      <p id="status"></p>
+    </form>
+  </div>
 
   <script>
     const scriptURL = 'https://script.google.com/macros/s/AKfycbzVGwwFbqrd0Ob_nUt0jA_sQ-DgITpAr1d0lUVnQq-wCyW1e2WAKA9y34BS9pyZF616/exec';
@@ -30,9 +92,13 @@
     form.addEventListener('submit', e => {
       e.preventDefault();
       fetch(scriptURL, { method: 'POST', body: new FormData(form)})
-        .then(response => status.innerHTML = "Submitted successfully!")
-        .catch(error => status.innerHTML = "Error!");
-      form.reset();
+        .then(response => {
+          status.innerHTML = "✅ Submitted successfully!";
+          form.reset();
+        })
+        .catch(error => {
+          status.innerHTML = "❌ Submission failed. Try again.";
+        });
     });
   </script>
 </body>
