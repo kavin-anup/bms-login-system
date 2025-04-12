@@ -2,135 +2,131 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BoostMySites Login</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Employee Login System</title>
 
-  <!-- Google Font: Spectral -->
-  <link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet" />
+  <!-- Spectral Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 
   <style>
-    html, body {
+    * {
       margin: 0;
       padding: 0;
-      height: 100%;
-      background-color: black;
-      color: white;
+      box-sizing: border-box;
       font-family: 'Spectral', serif;
+    }
+
+    html, body {
+      height: 100%;
+      background-color: #000000;
+      color: white;
     }
 
     body {
       display: flex;
-      flex-direction: column;
-      align-items: center;
       justify-content: center;
-      padding: 2rem;
+      align-items: center;
+      padding: 30px;
     }
 
-    img {
-      width: 200px;
+    .container {
+      text-align: center;
+      width: 100%;
+      max-width: 500px;
+    }
+
+    img.logo {
+      max-width: 200px;
       margin-bottom: 20px;
     }
 
-    form {
-      background-color: rgba(255, 255, 255, 0.05);
-      padding: 2rem;
-      border-radius: 10px;
-      max-width: 400px;
-      width: 100%;
+    h2 {
+      margin-bottom: 20px;
     }
 
-    select, input, textarea, button {
-      font-family: inherit;
-      background-color: orange;
-      color: black;
+    select, textarea, input[type="time"], input[type="submit"] {
+      width: 100%;
+      margin: 10px 0;
       padding: 10px;
       border: none;
-      margin: 10px 0;
-      width: 100%;
-      font-size: 1rem;
-      border-radius: 5px;
-      box-sizing: border-box;
+      border-radius: 6px;
+      font-size: 16px;
+      font-family: inherit;
+    }
+
+    select, textarea, input[type="time"] {
+      background-color: #d97e00;
+      color: white;
+    }
+
+    input[type="radio"] {
+      margin: 0 5px;
+    }
+
+    input[type="submit"] {
+      background-color: #d97e00;
+      color: white;
+      cursor: pointer;
+      font-weight: bold;
     }
 
     label {
       display: block;
-      margin-top: 1rem;
-      text-align: left;
-    }
-
-    #task-box {
-      display: none;
-    }
-
-    .radio-group {
-      display: flex;
-      justify-content: space-around;
-      margin-top: 1rem;
-    }
-
-    .radio-group label {
-      font-size: 1rem;
+      margin-top: 15px;
+      margin-bottom: 5px;
     }
   </style>
 </head>
 <body>
+  <div class="container">
+    <img src="logo.png" alt="Boostmysites Logo" class="logo" />
 
-  <!-- Logo Placeholder -->
-  <img src="https://via.placeholder.com/200x80?text=Boostmysites+Logo" alt="Boostmysites Logo" />
+    <h2>Employee Login System</h2>
 
-  <!-- Login Form -->
-  <form id="login-form">
-    <h2>Employee Login</h2>
+    <form id="loginForm" method="POST" action="https://script.google.com/macros/s/AKfycbzVGwwFbqrd0Ob_nUt0jA_sQ-DgITpAr1d0lUVnQq-wCyW1e2WAKA9y34BS9pyZF616/exec">
+      
+      <label for="employeeName">Select Your Name:</label>
+      <select name="employeeName" id="employeeName" required>
+        <option value="">-- Select Name --</option>
+        <option value="Alex">Alex</option>
+        <option value="Maria">Maria</option>
+        <option value="John">John</option>
+      </select>
 
-    <!-- Employee Dropdown -->
-    <label for="employee">Select Your Name:</label>
-    <select name="employee" id="employee-select" required>
-      <option value="" disabled selected>Select Name</option>
-      <option value="John">John</option>
-      <option value="Jane">Jane</option>
-      <option value="Alex">Alex</option>
-    </select>
+      <div>
+        <label>
+          <input type="radio" name="logType" value="Log In" required> Log In
+        </label>
+        <label>
+          <input type="radio" name="logType" value="Log Out"> Log Out
+        </label>
+      </div>
 
-    <!-- Log In / Log Out Radio -->
-    <div class="radio-group">
-      <label>
-        <input type="radio" name="status" value="login" required onclick="toggleTaskBox(false)" />
-        Log In
-      </label>
-      <label>
-        <input type="radio" name="status" value="logout" onclick="toggleTaskBox(true)" />
-        Log Out
-      </label>
-    </div>
+      <label for="time">Select Time:</label>
+      <input type="time" name="time" id="time" required />
 
-    <!-- Time Input -->
-    <label for="time">Time:</label>
-    <input type="time" name="time" required />
+      <div id="taskBox" style="display: none;">
+        <label for="tasks">What did you work on today?</label>
+        <textarea name="tasks" id="tasks" rows="5" placeholder="Enter tasks..."></textarea>
+      </div>
 
-    <!-- Task Box (hidden unless logging out) -->
-    <div id="task-box">
-      <label for="tasks">What did you work on today?</label>
-      <textarea name="tasks" rows="4" placeholder="Enter tasks..."></textarea>
-    </div>
-
-    <!-- Submit -->
-    <button type="submit">Submit</button>
-  </form>
+      <input type="submit" value="Submit" />
+    </form>
+  </div>
 
   <script>
-    function toggleTaskBox(show) {
-      document.getElementById('task-box').style.display = show ? 'block' : 'none';
-    }
+    const logTypeRadios = document.querySelectorAll('input[name="logType"]');
+    const taskBox = document.getElementById('taskBox');
 
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbzVGwwFbqrd0Ob_nUt0jA_sQ-DgITpAr1d0lUVnQq-wCyW1e2WAKA9y34BS9pyZF616/exec'; // replace this
-
-    document.getElementById('login-form').addEventListener('submit', e => {
-      e.preventDefault();
-      fetch(scriptURL, { method: 'POST', body: new FormData(e.target) })
-        .then(response => alert("Submitted successfully!"))
-        .catch(error => alert("Something went wrong."));
+    logTypeRadios.forEach(radio => {
+      radio.addEventListener('change', () => {
+        if (radio.value === 'Log Out' && radio.checked) {
+          taskBox.style.display = 'block';
+        } else {
+          taskBox.style.display = 'none';
+        }
+      });
     });
   </script>
-
 </body>
 </html>
