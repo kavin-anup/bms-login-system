@@ -115,51 +115,71 @@
     </form>
   </div>
 
-  <script>
-    const logTypeRadios = document.querySelectorAll('input[name="logType"]');
-    const taskBox = document.getElementById('taskBox');
-    const form = document.getElementById('loginForm');
-    const statusMessage = document.getElementById('statusMessage');
+<script>
+  const logTypeRadios = document.querySelectorAll('input[name="logType"]');
+  const taskBox = document.getElementById('taskBox');
+  const form = document.getElementById('loginForm');
+  const statusMessage = document.getElementById('statusMessage');
+  const tasksInput = document.getElementById('tasks');
 
-    logTypeRadios.forEach(radio => {
-      radio.addEventListener('change', () => {
-        taskBox.style.display = radio.value === 'Log Out' && radio.checked ? 'block' : 'none';
-      });
-    });
-
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-
-      const formData = new FormData(form);
-      const data = Object.fromEntries(formData.entries());
-      const isLogout = data.logType === 'Log Out';
-
-      try {
-        const response = await fetch('https://script.google.com/macros/s/AKfycbyGUtI6Mz67GOkWWtE1eFSGHzH8mSZ7AuSA6utk_2WBxrDo2mWdLMdfN3z3h6HHQla0GA/exec', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
-          },
-          body: new URLSearchParams(data)
-        });
-
-        const text = await response.text();
-
-        if (response.ok && text.includes("✅ Success")) {
-          statusMessage.textContent = isLogout 
-            ? '✅ Successfully Logged Out. Have a good rest of your day!' 
-            : '✅ Successfully Logged In';
-          statusMessage.style.color = 'lightgreen';
-          form.reset();
-          taskBox.style.display = 'none';
-        } else {
-          throw new Error("Invalid response");
+  // Show task box only if "Log Out" is selected
+  logTypeRadios.forEach(radio => {
+    radio.addEventListener('change', () => {
+      taskBox.style.display = radio.value === 'Log Out' && radio.checked ? 'block' : 'none';
+      if (radio.value === 'Log Out' && radio.checked) {
+        // Pre-fill with a bullet if empty
+        if (tasksInput.value.trim() === "") {
+          tasksInput.value = "• ";
         }
-      } catch (error) {
-        statusMessage.textContent = '❌ Unable to log-in, please contact Boostmysites';
-        statusMessage.style.color = 'red';
       }
     });
-  </script>
+  });
+
+  // Add bullet point on Enter key
+  tasksInput.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      const cursorPos = this.selectionStart;
+      const before = this.value.substring(0, cursorPos);
+      const after = this.value.substring(cursorPos);
+      this.value = before + "\n• " + after;
+      this.selectionStart = this.selectionEnd = cursorPos + 3;
+    }
+  });
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData(form);
+    const data = Object.fromEntries(formData.entries());
+    const isLogout = data.logType === 'Log Out';
+
+    try {
+      const response = await fetch('https://script.google.com/macros/s/AKfycbzVGwwFbqrd0Ob_nUt0jA_sQ-DgITpAr1d0lUVnQq-wCyW1e2WAKA9y34BS9pyZF616/exec', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: new URLSearchParams(data)
+      });
+
+      const text = await response.text();
+
+      if (response.ok && text.toLowerCase().includes("success")) {
+        statusMessage.textContent = isLogout 
+          ? '✅ Successfully Logged Out. Have a good rest of your day!' 
+          : '✅ Successfully Logged In';
+        statusMessage.style.color = 'lightgreen';
+        form.reset();
+        taskBox.style.display = 'none';
+      } else {
+        throw new Error("Server did not respond correctly");
+      }
+    } catch (error) {
+      statusMessage.textContent = '❌ Unable to log-in, please contact Boostmysites';
+      statusMessage.style.color = 'red';
+    }
+  });
+</script>
 </body>
 </html>
