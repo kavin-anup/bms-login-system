@@ -4,75 +4,116 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BoostMySites Login</title>
+
+  <!-- Google Font: Spectral -->
   <link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet" />
+
   <style>
-    body {
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
       background-color: black;
       color: white;
       font-family: 'Spectral', serif;
-      text-align: center;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
       padding: 2rem;
     }
+
     img {
       width: 200px;
       margin-bottom: 20px;
     }
+
+    form {
+      background-color: rgba(255, 255, 255, 0.05);
+      padding: 2rem;
+      border-radius: 10px;
+      max-width: 400px;
+      width: 100%;
+    }
+
     select, input, textarea, button {
+      font-family: inherit;
       background-color: orange;
       color: black;
       padding: 10px;
       border: none;
-      margin: 10px;
+      margin: 10px 0;
+      width: 100%;
       font-size: 1rem;
       border-radius: 5px;
+      box-sizing: border-box;
     }
+
+    label {
+      display: block;
+      margin-top: 1rem;
+      text-align: left;
+    }
+
     #task-box {
       display: none;
+    }
+
+    .radio-group {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 1rem;
+    }
+
+    .radio-group label {
+      font-size: 1rem;
     }
   </style>
 </head>
 <body>
 
-  <!-- Logo -->
-  <img src="boostmysites-logo.png" alt="Boostmysites Logo" />
+  <!-- Logo Placeholder -->
+  <img src="https://via.placeholder.com/200x80?text=Boostmysites+Logo" alt="Boostmysites Logo" />
 
-  <!-- Form -->
+  <!-- Login Form -->
   <form id="login-form">
-    <h2>Employee Login System</h2>
+    <h2>Employee Login</h2>
 
-    <!-- Employee Name -->
+    <!-- Employee Dropdown -->
     <label for="employee">Select Your Name:</label>
-    <br>
     <select name="employee" id="employee-select" required>
       <option value="" disabled selected>Select Name</option>
       <option value="John">John</option>
       <option value="Jane">Jane</option>
       <option value="Alex">Alex</option>
     </select>
-    <br>
 
-    <!-- Login / Logout -->
-    <label>
-      <input type="radio" name="status" value="login" required onclick="toggleTaskBox(false)" />
-      Log In
-    </label>
-    <label>
-      <input type="radio" name="status" value="logout" onclick="toggleTaskBox(true)" />
-      Log Out
-    </label>
-    <br>
-
-    <!-- Time -->
-    <input type="time" name="time" required />
-    <br>
-
-    <!-- Task Box (Hidden on Login) -->
-    <div id="task-box">
-      <label for="tasks">What did you work on today?</label><br>
-      <textarea name="tasks" rows="4" cols="50" placeholder="Enter tasks..."></textarea>
+    <!-- Log In / Log Out Radio -->
+    <div class="radio-group">
+      <label>
+        <input type="radio" name="status" value="login" required onclick="toggleTaskBox(false)" />
+        Log In
+      </label>
+      <label>
+        <input type="radio" name="status" value="logout" onclick="toggleTaskBox(true)" />
+        Log Out
+      </label>
     </div>
 
-    <br>
+    <!-- Time Input -->
+    <label for="time">Time:</label>
+    <input type="time" name="time" required />
+
+    <!-- Task Box (hidden unless logging out) -->
+    <div id="task-box">
+      <label for="tasks">What did you work on today?</label>
+      <textarea name="tasks" rows="4" placeholder="Enter tasks..."></textarea>
+    </div>
+
+    <!-- Submit -->
     <button type="submit">Submit</button>
   </form>
 
@@ -81,7 +122,7 @@
       document.getElementById('task-box').style.display = show ? 'block' : 'none';
     }
 
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbzVGwwFbqrd0Ob_nUt0jA_sQ-DgITpAr1d0lUVnQq-wCyW1e2WAKA9y34BS9pyZF616/exec'; // Replace with your actual URL
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbzVGwwFbqrd0Ob_nUt0jA_sQ-DgITpAr1d0lUVnQq-wCyW1e2WAKA9y34BS9pyZF616/exec'; // replace this
 
     document.getElementById('login-form').addEventListener('submit', e => {
       e.preventDefault();
