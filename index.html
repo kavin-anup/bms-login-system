@@ -3,9 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Employee Login System</title>
+  <title>Boostmysites Login</title>
 
-  <!-- Spectral Font -->
   <link href="https://fonts.googleapis.com/css2?family=Spectral&display=swap" rel="stylesheet">
 
   <style>
@@ -75,6 +74,11 @@
       margin-top: 15px;
       margin-bottom: 5px;
     }
+
+    #statusMessage {
+      margin-top: 15px;
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
@@ -83,8 +87,7 @@
 
     <h2>Employee Login System</h2>
 
-    <form id="loginForm" method="POST" action="https://script.google.com/macros/s/AKfycbzVGwwFbqrd0Ob_nUt0jA_sQ-DgITpAr1d0lUVnQq-wCyW1e2WAKA9y34BS9pyZF616/exec">
-      
+    <form id="loginForm">
       <label for="employeeName">Select Your Name:</label>
       <select name="employeeName" id="employeeName" required>
         <option value="">-- Select Name --</option>
@@ -103,26 +106,59 @@
       </div>
 
       <div id="taskBox" style="display: none;">
-        <label for="tasks">What did you work on today?</label>
+        <label for="tasks">List your tasks for the day</label>
         <textarea name="tasks" id="tasks" rows="5" placeholder="Enter tasks..."></textarea>
       </div>
 
       <input type="submit" value="Submit" />
+      <div id="statusMessage"></div>
     </form>
   </div>
 
   <script>
     const logTypeRadios = document.querySelectorAll('input[name="logType"]');
     const taskBox = document.getElementById('taskBox');
+    const form = document.getElementById('loginForm');
+    const statusMessage = document.getElementById('statusMessage');
 
+    // Show task box only if "Log Out" is selected
     logTypeRadios.forEach(radio => {
       radio.addEventListener('change', () => {
-        if (radio.value === 'Log Out' && radio.checked) {
-          taskBox.style.display = 'block';
-        } else {
-          taskBox.style.display = 'none';
-        }
+        taskBox.style.display = radio.value === 'Log Out' && radio.checked ? 'block' : 'none';
       });
+    });
+
+    // Submit form using JavaScript
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const formData = new FormData(form);
+      const data = Object.fromEntries(formData.entries());
+
+      try {
+        const response = await fetch('https://script.google.com/macros/s/AKfycbzVGwwFbqrd0Ob_nUt0jA_sQ-DgITpAr1d0lUVnQq-wCyW1e2WAKA9y34BS9pyZF616/exec', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          },
+          body: new URLSearchParams(data)
+        });
+
+        const text = await response.text();
+
+        if (response.ok && text.toLowerCase().includes("success")) {
+          statusMessage.textContent = '✅ Successfully Logged in';
+          statusMessage.style.color = 'lightgreen';
+          form.reset();
+          taskBox.style.display = 'none';
+        } else {
+          statusMessage.textContent = '❌ Unable to log-in, please contact Boostmysites';
+          statusMessage.style.color = 'red';
+        }
+      } catch (error) {
+        statusMessage.textContent = '❌ Unable to log-in, please contact Boostmysites';
+        statusMessage.style.color = 'red';
+      }
     });
   </script>
 </body>
